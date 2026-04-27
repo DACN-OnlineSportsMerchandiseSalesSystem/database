@@ -12,9 +12,12 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     phone VARCHAR(20),
     password VARCHAR(255) NOT NULL,
-    full_name VARCHAR(100),
+    last_name varchar(255),
+    first_name varchar(255),
     role_id BIGINT,
-    is_active BOOLEAN default true,
+    level BIGINT, 
+    last_login DATETIME,
+    status VARCHAR(50) DEFAULT 'ACTIVE',
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
 );
 
@@ -47,7 +50,10 @@ CREATE TABLE products (
     description TEXT,
     category_id BIGINT,
     brand_id BIGINT,
-    is_active BOOLEAN default true,
+    status VARCHAR(50) DEFAULT 'ACTIVE',
+    slug VARCHAR(255),
+    product_code VARCHAR(50) not null,
+    search_tag varchar(50),
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
     FOREIGN KEY (brand_id) REFERENCES brands(id) ON DELETE SET NULL
 );
@@ -69,6 +75,8 @@ CREATE TABLE product_variants (
     color VARCHAR(50),
     price DECIMAL(12,2) NOT NULL,
     stock_quantity INT DEFAULT 0,
+    weight INT,
+    gender VARCHAR(50),
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
@@ -141,6 +149,18 @@ CREATE TABLE payments (
     transaction_code VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+
+CREATE TABLE reviews (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT,
+    product_id BIGINT,
+    rating INT CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    title TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 -- ==========================================
