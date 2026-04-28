@@ -107,6 +107,7 @@ CREATE TABLE vouchers (
     discount_amount DECIMAL(12,2),
     min_order_value DECIMAL(12,2),
     usage_limit INT,
+    used_count INT DEFAULT 0,
     expiry_date DATETIME,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -123,6 +124,7 @@ CREATE TABLE orders (
     total_price DECIMAL(12,2),
     note VARCHAR(255),
     status VARCHAR(50),
+    shipping_fee DECIMAL(12,2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     voucher_id BIGINT,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
